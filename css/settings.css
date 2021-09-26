@@ -1,0 +1,37 @@
+/* USED FONTS */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap");
+
+/* font-family: 'Roboto', sans-serif; */
+/* font-family: 'Oxanium', cursive; */
+
+:root {
+  /* colors */
+  --color-dark: #333;
+  --color-dgrey: #777;
+  --color-grey: #aaa;
+  --color-lgrey: #eee;
+  --color-light: #fff;
+  --color-deep: hsl(200, 40%, 20%);
+  --color-BG: hsl(200, 70%, 90%);
+  --color-link: hsl(240, 50%, 50%);
+  --color-btn: hsl(240, 30%, 50%);
+  --color-red: hsl(12, 30%, 50%);
+  --color-green: hsl(110, 30%, 50%);
+  --color-error: hsl(12, 60%, 50%);
+  /* sizes */
+  --xxs-size: 0.25rem;
+  --xs-size: 0.7rem;
+  --s-size: 1rem;
+  --m-size: 1.5rem;
+  --l-size: 2rem;
+  --xl-size: 2.5rem;
+  /* font sizes */
+  --xs-font: 1rem;
+  --s-font: 1.2rem;
+  --m-font: 1.5rem;
+  --l-font: 1.8rem;
+  --xl-font: 2.4rem;
+  --xxl-font: 3.6rem;
+}

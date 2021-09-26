@@ -1,0 +1,36 @@
+.add-new-container {
+  align-items: center;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s-size);
+  justify-content: space-between;
+  margin-top: var(--m-size);
+}
+
+.add-new-button {
+  color: var(--color-btn);
+  cursor: pointer;
+  font-size: var(--xl-font);
+}
+
+.add-new-input {
+  font-size: var(--m-font);
+  line-height: 1.4;
+  padding: 0 var(--xs-size);
+}
+
+@media only screen and (max-width: 560px) {
+  .add-new-container {
+    gap: var(--xxs-size);
+    margin-top: var(--s-size);
+  }
+
+  .add-new-button {
+    font-size: var(--l-font);
+  }
+
+  .add-new-input {
+    font-size: var(--s-font);
+    padding: 0 var(--xxs-size);
+  }
+}

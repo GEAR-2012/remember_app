@@ -1,0 +1,162 @@
+.task-list__form {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.task-list__title {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--color-deep);
+  font-family: "Oxanium", cursive;
+  font-size: var(--xl-font);
+  line-height: 1;
+  outline: none;
+  padding: var(--xs-size) var(--s-size);
+  word-break: break-all;
+}
+
+.task-list__empty-msg {
+  color: var(--color-grey);
+  font-family: "Oxanium", cursive;
+  font-size: var(--l-font);
+  text-align: center;
+}
+
+.task-list__container {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.list-item {
+  align-items: center;
+  border-bottom: 1px solid var(--color-grey);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.6rem;
+  justify-content: space-between;
+}
+
+/* CUSTOM CHECKBOX */
+.list-item .label-as-cont {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 1.4rem;
+  justify-content: center;
+  width: 1.4rem;
+  z-index: 1;
+}
+
+.label-as-cont .chk {
+  display: none;
+}
+
+.label-as-cont i {
+  line-height: 1;
+}
+
+.label-as-cont .chk ~ i:nth-of-type(2) {
+  display: none;
+}
+
+.label-as-cont .chk:checked ~ i:nth-of-type(1) {
+  display: none;
+}
+
+.label-as-cont .chk:checked ~ i:nth-of-type(2) {
+  display: initial;
+}
+
+/* CUSTOM CHECKBOX END */
+
+.line-through {
+  color: var(--color-grey);
+  font-weight: 200;
+  text-decoration: line-through;
+}
+
+.remove-btn {
+  color: var(--color-red);
+  cursor: pointer;
+  font-size: var(--m-font) !important;
+}
+
+.check-btn {
+  color: var(--color-green);
+  font-size: var(--m-font) !important;
+}
+
+.list-item .txt-inp {
+  font-size: var(--m-font);
+  line-height: 1.4;
+  outline: none;
+  word-break: break-all;
+}
+
+.task-list__buttons {
+  align-items: center;
+  display: grid;
+  gap: var(--xl-size);
+  grid-auto-flow: column;
+  justify-content: center;
+}
+
+.task-list__buttons i {
+  background-color: var(--color-btn);
+  color: var(--color-light);
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: var(--m-font);
+  padding: var(--xs-size);
+}
+
+@media only screen and (max-width: 560px) {
+  .task-list__form {
+    gap: 1rem;
+  }
+
+  .task-list__title {
+    font-size: var(--l-font);
+    padding: var(--xxs-size) var(--xs-size);
+  }
+
+  .task-list__empty-msg {
+    font-size: var(--s-font);
+  }
+
+  .task-list__container {
+    gap: 0.8rem;
+  }
+
+  .list-item {
+    gap: 0.4rem;
+  }
+
+  /* CUSTOM CHECKBOX */
+  .list-item .label-as-cont {
+    height: 1.4rem;
+    width: 1.4rem;
+  }
+  /* CUSTOM CHECKBOX END */
+
+  .remove-btn {
+    font-size: var(--s-font) !important;
+  }
+
+  .check-btn {
+    font-size: var(--s-font) !important;
+  }
+
+  .list-item .txt-inp {
+    font-size: var(--s-font);
+    line-height: 1.4;
+  }
+
+  .task-list__buttons {
+    gap: var(--xl-size);
+  }
+
+  .task-list__buttons i {
+    font-size: var(--s-font);
+    padding: var(--xs-size);
+  }
+}

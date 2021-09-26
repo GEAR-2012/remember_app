@@ -1,0 +1,26 @@
+header {
+  align-items: center;
+  background-color: var(--color-deep);
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  padding: var(--s-size) var(--xl-size);
+}
+
+header .brand {
+  color: var(--color-light);
+  font-family: "Oxanium", cursive;
+  font-size: var(--xxl-font);
+  line-height: 1;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 560px) {
+  header {
+    padding: var(--xs-size) var(--s-size);
+  }
+
+  header .brand {
+    font-size: var(--l-font);
+  }
+}
