@@ -5,5 +5,5 @@ if (!isset($_SESSION['user_name'])) {
     header('Location: pages/login.page.php');
     exit;
 } else {
-    header('Location: pages/collection.page.php');
+    header('Location: processes/collection.proc.php');
 }
