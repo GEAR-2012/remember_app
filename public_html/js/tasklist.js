@@ -2,7 +2,7 @@ const taskListTitle = document.querySelector("#task-list__title");
 const addNewTaskBtn = document.querySelector("#add-new-button");
 const addNewTaskInput = document.querySelector("#add-new-input");
 const formList = document.querySelector("#task-list__form");
-const hidden = document.querySelector("#hidden-data-holder");
+const backBtn = document.querySelector("#back-btn");
 const taskListContainer = document.querySelector("#task-list__container");
 const resetTaskListBtn = document.querySelector("#reset-task-list");
 const deleteTaskListBtn = document.querySelector("#delete-task-list");
@@ -111,7 +111,7 @@ formList.onsubmit = (e) => {
   // e.preventDefault();
   // add the task list object as value to the form hidden input
   // so this way to send back to php
-  hidden.value = JSON.stringify(taskListFromPHP);
+  backBtn.value = JSON.stringify(taskListFromPHP);
 };
 
 // Prevent form submission on enter key press
@@ -181,7 +181,7 @@ deleteTaskListBtn.onclick = deleteTaskListHandler;
 // displays the empty message in the task list container
 function displayEmptyMsg() {
   const msgElem = document.createElement("h2");
-  msgElem.classList.add("task-list__empty-msg");
+  msgElem.classList.add("empty-msg");
   msgElem.textContent = "Add new item to the list";
   taskListContainer.appendChild(msgElem);
 }

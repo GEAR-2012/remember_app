@@ -3,7 +3,6 @@
   font-family: "Oxanium", cursive;
   font-size: var(--l-font);
   line-height: 1.2;
-  margin-top: var(--m-size);
   padding: 0 var(--s-size);
   text-align: center;
   word-break: break-all;
@@ -12,6 +11,5 @@
 @media only screen and (max-width: 560px) {
   .welcome {
     font-size: var(--s-font);
-    margin-top: var(--s-size);
   }
 }

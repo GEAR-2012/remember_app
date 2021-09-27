@@ -8,6 +8,14 @@ const hiddenTaskListId = document.querySelector("#hidden-task_list_open");
 const hiddenTaskListNew = document.querySelector("#hidden-task_list_new");
 const hiddenTaskListDelete = document.querySelector("#hidden-task_list_delete");
 
+// Prevent form submission on enter key press
+window.onkeydown = (e) => {
+  if (e.keyCode == 13) {
+    e.preventDefault();
+    return false;
+  }
+};
+
 createNewListInput.setAttribute("placeholder", "Create new task list");
 
 if (taskListCollectionFromPHP.length === 0) {

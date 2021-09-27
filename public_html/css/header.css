@@ -4,7 +4,11 @@ header {
   display: grid;
   grid-auto-flow: column;
   justify-content: space-between;
+  left: 0;
   padding: var(--s-size) var(--xl-size);
+  position: fixed;
+  top: 0;
+  width: 100vw;
 }
 
 header .brand {

@@ -1,5 +1,5 @@
 <?php
-include 'classes/Database.php';
+include 'Database.php';
 
 class UserAuth extends Database
 {

@@ -1,0 +1,33 @@
+footer {
+  align-items: center;
+  background-color: var(--color-deep);
+  bottom: 0;
+  color: var(--color-light);
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  left: 0;
+  line-height: 1;
+  padding: var(--s-size) var(--xl-size);
+  position: fixed;
+  width: 100vw;
+}
+
+footer .copyright {
+  display: grid;
+  font-size: var(--xs-font);
+  gap: var(--xs-size);
+  grid-auto-flow: column;
+}
+
+@media only screen and (max-width: 560px) {
+  footer {
+    font-size: var(--xxs-font);
+    padding: var(--xs-size) var(--s-size);
+  }
+
+  footer .copyright {
+    font-size: var(--xxs-font);
+    gap: var(--xxs-size);
+  }
+}

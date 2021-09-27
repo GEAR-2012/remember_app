@@ -27,7 +27,10 @@
   --m-size: 1.5rem;
   --l-size: 2rem;
   --xl-size: 2.5rem;
+  --xxl-size: 3.6rem;
+  --xxxl-size: 6.5rem;
   /* font sizes */
+  --xxs-font: 0.7rem;
   --xs-font: 1rem;
   --s-font: 1.2rem;
   --m-font: 1.5rem;

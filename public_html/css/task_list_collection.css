@@ -10,13 +10,6 @@
   gap: 1rem;
 }
 
-.collection-container .empty-msg {
-  color: var(--color-grey);
-  font-family: "Oxanium", cursive;
-  font-size: var(--l-font);
-  text-align: center;
-}
-
 .collection-container .task-list__cont {
   align-items: center;
   border-bottom: 1px solid var(--color-grey);
@@ -26,6 +19,7 @@
 }
 
 .collection-container .task-list__name {
+  cursor: pointer;
   font-size: var(--l-font);
   line-height: 1.4;
   word-break: break-all;
@@ -44,10 +38,6 @@
 
   .collection-container {
     gap: 1rem;
-  }
-
-  .collection-container .empty-msg {
-    font-size: var(--s-font);
   }
 
   .collection-container .task-list__cont {

@@ -3,16 +3,16 @@
 class Database
 {
     // connection data on hosgator
-    private $serverName = 'localhost';
-    private $dBUsername = 'forevods_admin01';
-    private $dBPassword = 'RememberAdmin01';
-    private $dBName = 'forevods_remember';
+    // private $serverName = 'localhost';
+    // private $dBUsername = 'forevods_admin01';
+    // private $dBPassword = 'RememberAdmin01';
+    // private $dBName = 'forevods_remember';
 
     // connection data on my macbook
-    // private $serverName = 'localhost';
-    // private $dBUsername = 'rememberAdmin01';
-    // private $dBPassword = 'rememberAdmin01';
-    // private $dBName = 'remember';
+    private $serverName = 'localhost';
+    private $dBUsername = 'rememberAdmin01';
+    private $dBPassword = 'rememberAdmin01';
+    private $dBName = 'remember';
 
     // connection obj
     protected $conn;

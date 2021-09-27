@@ -14,13 +14,6 @@
   word-break: break-all;
 }
 
-.task-list__empty-msg {
-  color: var(--color-grey);
-  font-family: "Oxanium", cursive;
-  font-size: var(--l-font);
-  text-align: center;
-}
-
 .task-list__container {
   display: grid;
   gap: 0.8rem;
@@ -117,10 +110,6 @@
   .task-list__title {
     font-size: var(--l-font);
     padding: var(--xxs-size) var(--xs-size);
-  }
-
-  .task-list__empty-msg {
-    font-size: var(--s-font);
   }
 
   .task-list__container {

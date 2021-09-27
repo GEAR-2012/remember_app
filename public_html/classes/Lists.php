@@ -1,5 +1,5 @@
 <?php
-include 'classes/UserAuth.php';
+include 'UserAuth.php';
 
 class Lists extends UserAuth
 {

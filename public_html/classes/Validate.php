@@ -5,7 +5,7 @@ class Validate
     public function userName($name)
     {
         // returns error message or false
-        $name =  $this->test_input($name);
+        $name =  $this->cleanInput($name);
         // check for user name format
         if (strlen($name) < 3) {
             return 'At least 3 character, please';
@@ -22,7 +22,7 @@ class Validate
     public function email($email)
     {
         // returns error message or false
-        $email =  $this->test_input($email);
+        $email =  $this->cleanInput($email);
         // check for email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return 'Invalid email format';
@@ -52,7 +52,7 @@ class Validate
         return false;
     }
 
-    public function test_input($data)
+    public function cleanInput($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -60,5 +60,3 @@ class Validate
         return $data;
     }
 }
-
-$Validate = new Validate();
