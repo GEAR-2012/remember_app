@@ -72,6 +72,7 @@
   color: var(--color-red);
   cursor: pointer;
   font-size: var(--m-font) !important;
+  padding: var(--xs-size);
 }
 
 .check-btn {

@@ -2,17 +2,17 @@
 
 class Database
 {
-    // connection data on hosgator
-    // private $serverName = 'localhost';
-    // private $dBUsername = 'forevods_admin01';
-    // private $dBPassword = 'RememberAdmin01';
-    // private $dBName = 'forevods_remember';
-
-    // connection data on my macbook
+    // production database info
     private $serverName = 'localhost';
-    private $dBUsername = 'rememberAdmin01';
-    private $dBPassword = 'rememberAdmin01';
-    private $dBName = 'remember';
+    private $dBUsername = 'forevods_admin01';
+    private $dBPassword = 'RememberAdmin01';
+    private $dBName = 'forevods_remember';
+
+    // development databse info
+    // private $serverName = 'localhost';
+    // private $dBUsername = 'rememberAdmin01';
+    // private $dBPassword = 'rememberAdmin01';
+    // private $dBName = 'remember';
 
     // connection obj
     protected $conn;
@@ -27,7 +27,7 @@ class Database
             $this->dBPassword,
             $this->dBName
         );
-    
+
         // check connection & define the 'conn' property
         if (!$conn) {
             return 'Database connection error: ' . mysqli_connect_error();
@@ -36,7 +36,7 @@ class Database
         }
     }
 
-    
+
 
     public function __destruct()
     {

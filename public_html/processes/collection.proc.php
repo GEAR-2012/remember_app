@@ -13,7 +13,7 @@ $_SESSION['messages'] = [];
 
 // get the logged users tasklist collection from database
 $dBLists = new Lists();
-$taskListCollection = $dBLists->getUsersTaskLists($_SESSION['user_id']);
+$taskListCollection = $dBLists->getUserCollection($_SESSION['user_id']);
 unset($dBLists);
 
 // when the form request to open a tasklist
@@ -36,7 +36,7 @@ if (isset($_POST['task_list_new'])) {
         // and display the new taklist collection
         $dBLists = new Lists();
         if ($dBLists->createNewTasklist($_SESSION['user_id'], $newTaskListName)) {
-            $taskListCollection = $dBLists->getUsersTaskLists($_SESSION['user_id']);
+            $taskListCollection = $dBLists->getUserCollection($_SESSION['user_id']);
         } else {
             $_SESSION['messages'][] = "try again later";
         }
@@ -59,7 +59,7 @@ if (isset($_POST['task_list_delete'])) {
             // delete the selected tasklist from the database
             // and redisplay the tasklist collection
             if ($dBLists->deleteOneTaskList($_SESSION['user_id'], $taskListId)) {
-                $taskListCollection = $dBLists->getUsersTaskLists($_SESSION['user_id']);
+                $taskListCollection = $dBLists->getUserCollection($_SESSION['user_id']);
                 $_SESSION['messages'][] = 'Tasklist deleted';
             } else {
                 $_SESSION['messages'][] = 'Try again later';

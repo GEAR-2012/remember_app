@@ -29,16 +29,39 @@ class Lists extends UserAuth
         return $result;
     }
 
-    public function getUsersTaskLists($userId)
+    public function getUserCollection($userId)
     {
         $taslListCollection = [];
-        $sql = "SELECT task_list_id, task_list_name FROM lists WHERE user_id = ?;";
+        $sql = "SELECT task_list_id, task_list_name, task_list FROM lists WHERE user_id = ?;";
         $stmt = mysqli_prepare($this->conn, $sql);
         mysqli_stmt_bind_param($stmt, 'i', $userId);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         while ($row = mysqli_fetch_assoc($result)) {
-            array_push($taslListCollection, $row);
+            // get the tasklist
+            $tasklist = json_decode($row['task_list'], true);
+
+            // count all tasks in the tasklist
+            $countAll = count($tasklist);
+
+            // filter only true (done) tasks from tasklist
+            $tasklistTrue = array_filter($tasklist, function ($task) {
+                return $task['status'] === true;
+            });
+
+            // count only true (done) tasks
+            $countTrue = count($tasklistTrue);
+
+            // make the result assoc array
+            $data = [
+                'task_list_id' => $row['task_list_id'],
+                'task_list_name' => $row['task_list_name'],
+                'count_all' => $countAll,
+                'count_true' => $countTrue
+            ];
+
+            // push into the return data
+            array_push($taslListCollection, $data);
         }
         mysqli_stmt_close($stmt);
         return $taslListCollection;

@@ -1,5 +1,7 @@
 // 'taskListCollectionFromPHP' variable contains the task list collections data from PHP & from database
 
+console.log(taskListCollectionFromPHP);
+
 const collectionForm = document.querySelector("#collection__form");
 const collectionContainer = document.querySelector("#collection-container");
 const createNewListBtn = document.querySelector("#add-new-button");
@@ -24,37 +26,52 @@ if (taskListCollectionFromPHP.length === 0) {
   taskListCollectionFromPHP.forEach((taskList) => {
     const id = taskList.task_list_id;
     const text = taskList.task_list_name;
-    collectionContainer.appendChild(makeListItem(id, text));
+    const countAll = taskList.count_all;
+    const countTrue = taskList.count_true;
+    collectionContainer.appendChild(makeListItem(id, text, countAll, countTrue));
   });
 }
 
 // makes only one tasklistcollection element
-function makeListItem(id, text) {
-  // make the container
+function makeListItem(id, text, countAll, countTrue) {
+  // make the main list item container
   const listElem = document.createElement("div");
   listElem.classList.add("task-list__cont");
   listElem.setAttribute("id", id);
-  // make icon
+  //
+  // make the link container
+  const listLinkCont = document.createElement("div");
+  listLinkCont.classList.add("task-list__link");
+  listLinkCont.setAttribute("onclick", "listItemOnClickHandler(this)");
+  listLinkCont.setAttribute("title", "open this task list");
+  // make the list icon
   const listIcon = document.createElement("i");
   listIcon.classList.add("far", "fa-list-alt", "list-icon");
-  listIcon.setAttribute("onclick", "listItemOnClickHandler(this)");
-  listIcon.setAttribute("title", "open this task list");
+  // make the counter
+  const listCounter = document.createElement("span");
+  listCounter.classList.add("task-list__counter");
+  listCounter.textContent = `${countAll}/${countTrue}`;
   // make the text
   const listText = document.createElement("span");
   listText.classList.add("task-list__name");
-  listText.setAttribute("onclick", "listItemOnClickHandler(this)");
-  listText.setAttribute("title", "open this task list");
   listText.textContent = text;
+  //
+  // put togetger the list link container
+  listLinkCont.appendChild(listIcon);
+  listLinkCont.appendChild(listCounter);
+  listLinkCont.appendChild(listText);
+  //
   // make a delete button
   const listDelete = document.createElement("i");
   listDelete.classList.add("fas", "fa-minus-circle", "remove-btn");
   listDelete.setAttribute("onclick", "deleteTaskListHandler(this)");
   listDelete.setAttribute("title", "delete this task list");
-
-  listElem.appendChild(listIcon);
-  listElem.appendChild(listText);
+  //
+  // put everything together
+  listElem.appendChild(listLinkCont);
   listElem.appendChild(listDelete);
-
+  //
+  // ..and return it
   return listElem;
 }
 

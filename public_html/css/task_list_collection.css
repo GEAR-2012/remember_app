@@ -23,12 +23,25 @@
   align-items: center;
   border-bottom: 1px solid var(--color-grey);
   display: grid;
-  gap: 1rem;
-  grid-template-columns: auto 1fr auto;
+  gap: var(--l-size);
+  grid-template-columns: 1fr auto;
+}
+
+.collection-container .task-list__link {
+  align-items: center;
+  cursor: pointer;
+  display: grid;
+  gap: var(--xs-size);
+  grid-template-columns: auto auto 1fr;
+}
+
+.collection-container .task-list__counter {
+  color: var(--color-dgrey);
+  font-size: var(--s-font);
+  line-height: 1;
 }
 
 .collection-container .task-list__name {
-  cursor: pointer;
   font-size: var(--l-font);
   line-height: 1.4;
   word-break: break-all;
@@ -56,6 +69,14 @@
 
   .collection-container .task-list__cont {
     gap: 1rem;
+  }
+
+  .collection-container .task-list__link {
+    gap: var(--xxs-size);
+  }
+
+  .collection-container .task-list__counter {
+    font-size: var(--xxs-font);
   }
 
   .collection-container .task-list__name {
