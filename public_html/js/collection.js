@@ -34,6 +34,11 @@ function makeListItem(id, text) {
   const listElem = document.createElement("div");
   listElem.classList.add("task-list__cont");
   listElem.setAttribute("id", id);
+  // make icon
+  const listIcon = document.createElement("i");
+  listIcon.classList.add("far", "fa-list-alt", "list-icon");
+  listIcon.setAttribute("onclick", "listItemOnClickHandler(this)");
+  listIcon.setAttribute("title", "open this task list");
   // make the text
   const listText = document.createElement("span");
   listText.classList.add("task-list__name");
@@ -46,6 +51,7 @@ function makeListItem(id, text) {
   listDelete.setAttribute("onclick", "deleteTaskListHandler(this)");
   listDelete.setAttribute("title", "delete this task list");
 
+  listElem.appendChild(listIcon);
   listElem.appendChild(listText);
   listElem.appendChild(listDelete);
 

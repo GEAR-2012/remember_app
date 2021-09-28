@@ -1,19 +1,19 @@
 .messages {
   color: var(--color-error);
   font-family: "Oxanium", cursive;
-  font-size: var(--xl-font);
+  font-size: var(--l-font);
   font-weight: 600;
   line-height: 1.4;
-  margin-top: var(--m-size);
-  padding: 0 var(--m-size);
+  margin-top: var(--s-size);
+  padding: 0 var(--s-size);
   text-align: center;
 }
 
 @media only screen and (max-width: 560px) {
   .messages {
-    font-size: var(--m-font);
+    font-size: var(--s-font);
     line-height: 1.2;
-    margin-top: var(--s-size);
-    padding: 0 var(--s-size);
+    margin-top: var(--xs-size);
+    padding: 0 var(--xs-size);
   }
 }

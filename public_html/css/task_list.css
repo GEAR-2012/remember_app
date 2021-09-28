@@ -67,6 +67,7 @@
   text-decoration: line-through;
 }
 
+/* Fontawesome icons */
 .remove-btn {
   color: var(--color-red);
   cursor: pointer;
@@ -77,6 +78,13 @@
   color: var(--color-green);
   font-size: var(--m-font) !important;
 }
+
+.list-icon {
+  color: var(--color-yellow);
+  cursor: pointer;
+  font-size: var(--m-font) !important;
+}
+/* Fontawesome icons end */
 
 .list-item .txt-inp {
   font-size: var(--m-font);
@@ -127,6 +135,7 @@
   }
   /* CUSTOM CHECKBOX END */
 
+  /* Fontawesome icons */
   .remove-btn {
     font-size: var(--s-font) !important;
   }
@@ -134,6 +143,11 @@
   .check-btn {
     font-size: var(--s-font) !important;
   }
+
+  .list-icon {
+    font-size: var(--s-font) !important;
+  }
+  /* Fontawesome icons end */
 
   .list-item .txt-inp {
     font-size: var(--s-font);

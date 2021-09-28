@@ -76,6 +76,7 @@ if (isset($_POST['task_list_delete'])) {
 $taskListCollectionToJs = json_encode($taskListCollection);
 
 $_SESSION['collection'] = $taskListCollectionToJs;
+$_SESSION['collection-count'] = count($taskListCollection);
 
 // redirect back to collection page
 header('Location: ../pages/collection.page.php');

@@ -20,6 +20,7 @@ if (!isset($_SESSION['collection'])) {
 
 // it comes from collection.proc.php
 $taskListCollectionToJs = $_SESSION['collection'];
+$collectionCount = $_SESSION['collection-count']
 
 ?>
 <script>
@@ -29,7 +30,14 @@ $taskListCollectionToJs = $_SESSION['collection'];
 
 <div class="main-wrapper content-center">
   <div class="form__cont">
-    <h1 id="collection__title" class="collection__title">Task List Collection</h1>
+    <div>
+      <h1 id="collection__title" class="collection__title">Task List Collection</h1>
+
+      <?php if ($collectionCount): ?>
+        <p class="collection__sub-title">Open one to add tasks to it.</p>
+      <?php endif; ?>
+
+    </div>
     <form id="collection__form" class="collection__form" action="../processes/collection.proc.php" method="POST">
       <div id="collection-container" class="collection-container">
         <!-- JavaScript fill up this place -->
@@ -49,3 +57,4 @@ $taskListCollectionToJs = $_SESSION['collection'];
 include '../templates/footer.temp.php';
 unset($_SESSION['messages']);
 unset($_SESSION['collection']);
+unset($_SESSION['collection-count']);

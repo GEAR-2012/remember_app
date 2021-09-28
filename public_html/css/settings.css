@@ -19,6 +19,7 @@
   --color-btn: hsl(240, 30%, 50%);
   --color-red: hsl(12, 30%, 50%);
   --color-green: hsl(110, 30%, 50%);
+  --color-yellow: hsl(60, 40%, 50%);
   --color-error: hsl(12, 60%, 50%);
   /* sizes */
   --xxs-size: 0.25rem;

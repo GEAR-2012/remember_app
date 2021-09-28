@@ -3,11 +3,20 @@
   font-family: "Oxanium", cursive;
   font-size: var(--xl-font);
   line-height: 1;
+  text-align: center;
+}
+
+.collection__sub-title {
+  color: var(--color-grey);
+  font-size: var(--s-font);
+  line-height: 1;
+  margin-top: var(--xs-size);
+  text-align: center;
 }
 
 .collection-container {
   display: grid;
-  gap: 1rem;
+  gap: 1.4rem;
 }
 
 .collection-container .task-list__cont {
@@ -15,7 +24,7 @@
   border-bottom: 1px solid var(--color-grey);
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
 }
 
 .collection-container .task-list__name {
@@ -36,8 +45,13 @@
     line-height: 1.2;
   }
 
+  .collection__sub-title {
+    font-size: var(--xs-font);
+    margin-top: var(--xxs-size);
+  }
+
   .collection-container {
-    gap: 1rem;
+    gap: 1.2rem;
   }
 
   .collection-container .task-list__cont {

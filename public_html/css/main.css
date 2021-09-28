@@ -177,7 +177,7 @@ li {
   .form__cont {
     border-radius: var(--xs-size);
     box-shadow: 0 0 1.6rem 0.5rem rgba(0, 0, 0, 0.1);
-    gap: var(--s-size);
+    gap: var(--m-size);
     min-width: 300px;
     padding: var(--m-size) var(--s-size);
   }
