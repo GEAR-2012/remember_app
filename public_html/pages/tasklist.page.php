@@ -8,6 +8,13 @@ if (!isset($_SESSION['user_name'])) {
     exit;
 }
 
+// CHECK if the user coming from somewhere else than collection page
+if (!isset($_SESSION['tasklist'])) {
+    // redirect back to collection process
+    header('Location: ../processes/collection.proc.php');
+    exit;
+}
+
 include '../templates/header.temp.php';
 include '../templates/welcome.temp.php';
 

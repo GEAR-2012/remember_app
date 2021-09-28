@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// CHECK FOR LOGGED IN USER
+if (isset($_SESSION['user_name'])) {
+    header('Location: ../processes/collection.proc.php');
+    exit;
+}
+
 // define empty variables
 $dbErr = $nameErr = $emailErr = $pwd_1Err = $pwd_2Err = '';
 $name = $email = $pwd_1 = $pwd_2 = '';
@@ -58,7 +64,7 @@ include '../templates/header.temp.php';
           echo "<span class='error'>$pwd_2Err</span>";
         ?>
       </div>  
-      <input type="submit" value="Register" name="submit" class="button">
+      <button type="submit" name="submit" class="button">Register</button>
     </form>
     <div class="form__ques">
       <p class="form__ques-text">Already have an account?</p>

@@ -1,13 +1,28 @@
 <?php
 session_start();
 
-if (isset($_POST['submit'])) {
-    if (!empty($_POST['submit'])) {
-        if ($_POST['submit'] === 'logout') {
-            session_unset();
-            session_destroy();
-            header('Location: ../pages/login.page.php');
-            exit;
-        }
-    }
+// CHECK FOR LOGGED IN USER
+if (!isset($_SESSION['user_name'])) {
+    header('Location: ../pages/login.page.php');
+    exit;
+}
+
+// CHECK if this file requested not by clicking logout button
+if (!isset($_POST['submit'])) {
+    // redirect back to collection process
+    header('Location: ../processes/collection.proc.php');
+    exit;
+}
+
+if (empty($_POST['submit'])) {
+    // redirect back to collection process
+    header('Location: ../processes/collection.proc.php');
+    exit;
+}
+
+if ($_POST['submit'] === 'logout') {
+    session_unset();
+    session_destroy();
+    header('Location: ../pages/login.page.php');
+    exit;
 }

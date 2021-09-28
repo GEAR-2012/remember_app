@@ -103,6 +103,9 @@ li {
   font-weight: 300;
   line-height: 1.6;
   outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 ::-webkit-input-placeholder {
