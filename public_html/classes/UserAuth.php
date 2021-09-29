@@ -12,7 +12,7 @@ class UserAuth extends Database
             $result;
     
         // create query string
-        $sql = "SELECT user_name FROM users WHERE user_name=?;";
+        $sql = "SELECT name FROM users WHERE name=?;";
     
         // prepared statement
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -53,9 +53,9 @@ class UserAuth extends Database
         $result;
 
         // create query string
-        $sql = "SELECT id, user_name, user_email, user_pwd
+        $sql = "SELECT id, name, email, pwd
                 FROM users
-                WHERE user_name=? OR user_email=?;";
+                WHERE name=? OR email=?;";
 
         // prepared statement
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -65,13 +65,20 @@ class UserAuth extends Database
 
         // execute query
         mysqli_stmt_execute($stmt);
+
+        // bind the returned result to variables
+        mysqli_stmt_bind_result($stmt, $user_id, $user_name, $user_email, $user_pwd);
         
-        // store the result in a result object
-        $resultData = mysqli_stmt_get_result($stmt);
         
         // check for any matches
-        if ($row = mysqli_fetch_assoc($resultData)) {
-            return $row;
+        if (mysqli_stmt_fetch($stmt)) {
+            $user = [
+                'user_id' => $user_id,
+                'user_name' => $user_name,
+                'user_email' => $user_email,
+                'user_pwd' => $user_pwd
+            ];
+            return $user;
         } else {
             $result = false;
         }
@@ -96,7 +103,7 @@ class UserAuth extends Database
         $hash = password_hash($pwd, PASSWORD_DEFAULT);
   
         // create query string
-        $sql = "INSERT INTO users (user_name, user_email, user_pwd)
+        $sql = "INSERT INTO users (name, email, pwd)
                 VALUES (?, ?, ?);";
 
         $stmt = mysqli_stmt_init($this->conn);

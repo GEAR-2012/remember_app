@@ -76,7 +76,7 @@ if (!isset($_POST['submit'])) {
 // SUCCESS LOGIN CASE SCENARIO
   // store user in session variable
     $_SESSION['user_name'] = $getUser['user_name'];
-    $_SESSION['user_id'] = $getUser['id'];
+    $_SESSION['user_id'] = $getUser['user_id'];
 
     // redirect to collection page
     header('Location: ../processes/collection.proc.php');

@@ -49,25 +49,28 @@ if (isset($_POST['task_list_delete'])) {
     if (!empty($_POST['task_list_delete'])) {
         // get the tasklist id to delete from database
         $taskListId = htmlspecialchars($_POST['task_list_delete']);
-
         $dBLists = new Lists();
-        // check the list of the selected tasklist if empty
-        $userTaskList = $dBLists->getOneTaskList($_SESSION['user_id'], $taskListId);
-        $userTaskListList = $userTaskList['task_list'];
-        // if the tasklist's list not exist or empty
-        if (!$userTaskListList) {
-            // delete the selected tasklist from the database
-            // and redisplay the tasklist collection
-            if ($dBLists->deleteOneTaskList($_SESSION['user_id'], $taskListId)) {
-                $taskListCollection = $dBLists->getUserCollection($_SESSION['user_id']);
+        // try to delete the selected tasklist from the database
+        $isDeleted = $dBLists->deleteOneTaskList($_SESSION['user_id'], $taskListId);
+        switch ($isDeleted) {
+            case -1:
+                // check if the tasklist empty or not exists
+                $_SESSION['messages'][] = 'The selected tasklist not empty';
+                break;
+            case 0:
+                // check for other deleting issues
+                $_SESSION['messages'][] = 'Nothing to delete';
+                break;
+            case 1:
+                // check for success deleting
                 $_SESSION['messages'][] = 'Tasklist deleted';
-            } else {
+                // redisplay the tasklist collection
+                $taskListCollection = $dBLists->getUserCollection($_SESSION['user_id']);
+                break;
+            default:
+                // in any other case
                 $_SESSION['messages'][] = 'Try again later';
-            }
-        } else {
-            $_SESSION['messages'][] = 'The selected tasklist not empty';
         }
-
         unset($dBLists);
     }
 }

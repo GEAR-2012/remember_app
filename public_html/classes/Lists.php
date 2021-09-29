@@ -3,18 +3,20 @@ include 'UserAuth.php';
 
 class Lists extends UserAuth
 {
-    public function createNewTasklist($userId, $tasklistName, $taskList = '')
+    public function createNewTasklist($userId, $tasklistName)
     {
+        // Creates a new tasklist linked with a user id
+        // returns true on success or false on failure
         $result;
         // create a query stirng
-        $sql = "INSERT INTO lists (user_id, task_list_name, task_list)
-                VALUES (?, ?, ?);";
+        $sql = "INSERT INTO tasklists (name, user_id)
+                VALUES (?, ?);";
 
         // prepared statement
         $stmt = mysqli_prepare($this->conn, $sql);
 
         // bind parameters for markers
-        mysqli_stmt_bind_param($stmt, 'iss', $userId, $tasklistName, $taskList);
+        mysqli_stmt_bind_param($stmt, 'si', $tasklistName, $userId);
 
         // execute query
         if (mysqli_stmt_execute($stmt)) {
@@ -31,56 +33,100 @@ class Lists extends UserAuth
 
     public function getUserCollection($userId)
     {
+        // get user's tasklist name, fullcount & done/true count from database
+        // all rows as an assoc array
+        // and push all into an array & return it on succes
+        // return false on failure
         $taslListCollection = [];
-        $sql = "SELECT task_list_id, task_list_name, task_list FROM lists WHERE user_id = ?;";
+        // step 1. get all tasklist from user
+        $sql = "SELECT
+                tl.id AS 'tasklist_id', 
+                tl.name AS 'tasklist_name'
+                FROM tasklists AS tl
+                INNER JOIN users AS u ON tl.user_id = u.id
+                WHERE u.id = ?;";
         $stmt = mysqli_prepare($this->conn, $sql);
+        // if ($stmt = mysqli_prepare($this->conn, $sql)) {
         mysqli_stmt_bind_param($stmt, 'i', $userId);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
-        while ($row = mysqli_fetch_assoc($result)) {
-            // get the tasklist
-            $tasklist = json_decode($row['task_list'], true);
+        mysqli_stmt_close($stmt);
 
-            // count all tasks in the tasklist
-            $countAll = count($tasklist);
+        while ($tasklist = mysqli_fetch_assoc($result)) {
+            // step 2. extract id & name of the next tasklist
+            $tasklist_id = $tasklist['tasklist_id'];
+            $tasklist_name = $tasklist['tasklist_name'];
+            $countAll;
+            $countTrue;
+            // step 3. get the count of all task in tasklist
+            $sql = "SELECT COUNT(task_status) AS countAll
+                    FROM tasks
+                    WHERE list_id = ?";
+            if ($stmt = mysqli_prepare($this->conn, $sql)) {
+                mysqli_stmt_bind_param($stmt, 'i', $tasklist_id);
+                mysqli_stmt_execute($stmt);
+                $result2 = mysqli_stmt_get_result($stmt);
+                while ($row = mysqli_fetch_assoc($result2)) {
+                    $countAll = $row['countAll'];
+                }
+            }
+            mysqli_stmt_close($stmt);
+            
+            // step 4. get the count of 'done' task in tasklist
+            $sql = "SELECT COUNT(task_status) AS countTrue
+                    FROM tasks
+                    WHERE list_id = ? AND task_status = true";
+            if ($stmt = mysqli_prepare($this->conn, $sql)) {
+                mysqli_stmt_bind_param($stmt, 'i', $tasklist_id);
+                mysqli_stmt_execute($stmt);
+                $result3 = mysqli_stmt_get_result($stmt);
+                while ($row = mysqli_fetch_assoc($result3)) {
+                    $countTrue = $row['countTrue'];
+                }
+            }
+            mysqli_stmt_close($stmt);
 
-            // filter only true (done) tasks from tasklist
-            $tasklistTrue = array_filter($tasklist, function ($task) {
-                return $task['status'] === true;
-            });
-
-            // count only true (done) tasks
-            $countTrue = count($tasklistTrue);
-
-            // make the result assoc array
+            // step 5. make the result assoc array
             $data = [
-                'task_list_id' => $row['task_list_id'],
-                'task_list_name' => $row['task_list_name'],
+                'tasklist_id' => $tasklist_id,
+                'tasklist_name' => $tasklist_name,
                 'count_all' => $countAll,
                 'count_true' => $countTrue
-            ];
+                ];
 
-            // push into the return data
+
+            //step 6. push into the return data
             array_push($taslListCollection, $data);
         }
-        mysqli_stmt_close($stmt);
+
+        // }
         return $taslListCollection;
     }
 
     public function getOneTaskList($userId, $taskListId)
     {
-        $sql = "SELECT task_list_name, task_list
-              FROM lists
-              WHERE user_id = ? AND task_list_id = ?;";
-        $stmt = mysqli_prepare($this->conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'ii', $userId, $taskListId);
-        mysqli_stmt_execute($stmt);
-        if ($result = mysqli_stmt_get_result($stmt)) {
-            $data = mysqli_fetch_assoc($result);
-
-            $data['task_list'] = json_decode($data['task_list'], true);
-
-            return $data;
+        // on succes:
+        // returns a tasklist based on user id & tasklist id
+        // on failure:
+        // returns false
+        $tasklist = [];
+        $sql = "SELECT 
+                t.task_name AS 'task_name', 
+                t.task_status AS 'task_status',
+                t.created_at AS 'created_at'
+                FROM tasks AS t
+                INNER JOIN tasklists AS tl ON t.list_id = tl.id
+                INNER JOIN users AS u ON tl.user_id = u.id
+                WHERE u.id = ? AND tl.id = ?
+                ORDER BY t.created_at DESC;";
+        if ($stmt = mysqli_prepare($this->conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, 'ii', $userId, $taskListId);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $tasklist[]= $row;
+            }
+            return $tasklist;
         } else {
             return false;
         }
@@ -88,17 +134,21 @@ class Lists extends UserAuth
 
     public function deleteOneTaskList($userId, $taskListId)
     {
-        $sql = "DELETE FROM lists WHERE user_id = ? AND task_list_id = ?;";
-        $stmt = mysqli_prepare($this->conn, $sql);
-        mysqli_stmt_bind_param($stmt, 'ii', $userId, $taskListId);
-        mysqli_stmt_execute($stmt);
-        $affectedRows = mysqli_stmt_affected_rows($stmt);
-        if ($affectedRows) {
-            return true;
+        // try to delete a tasklist based on user id & tasklist id
+        // on success return 1
+        // on failure return 0
+        // if the tasklist not empty or not exists return -1
+        $sql = "DELETE FROM tasklists 
+                WHERE user_id = ? AND id = ?;";
+        if ($stmt = mysqli_prepare($this->conn, $sql)) {
+            mysqli_stmt_bind_param($stmt, 'ii', $userId, $taskListId);
+            mysqli_stmt_execute($stmt);
+            $result =  mysqli_stmt_affected_rows($stmt);
+            mysqli_stmt_close($stmt);
+            return $result;
         } else {
             return false;
         }
-        mysqli_stmt_close($stmt);
     }
 
     public function updateOneTaskList($userId, $taskListId, $taskListName, $taskListList)

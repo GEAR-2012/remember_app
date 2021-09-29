@@ -24,8 +24,8 @@ if (taskListCollectionFromPHP.length === 0) {
   collectionContainer.appendChild(makeMessage());
 } else {
   taskListCollectionFromPHP.forEach((taskList) => {
-    const id = taskList.task_list_id;
-    const text = taskList.task_list_name;
+    const id = taskList.tasklist_id;
+    const text = taskList.tasklist_name;
     const countAll = taskList.count_all;
     const countTrue = taskList.count_true;
     collectionContainer.appendChild(makeListItem(id, text, countAll, countTrue));
