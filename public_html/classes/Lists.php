@@ -207,7 +207,6 @@ class Lists extends UserAuth
                 mysqli_stmt_bind_param($stmt, "siii", $name, $status, $created_at, $list_id);
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_affected_rows($stmt);
-                echo $result;
             }
             mysqli_stmt_close($stmt);
         } else {
