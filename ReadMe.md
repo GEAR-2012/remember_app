@@ -14,7 +14,7 @@ so multiple users can share the same email address
 ## on login page
 user can login with username or email address
 
-##on task list collection page
+## on task list collection page
 task list can be deleted only if empty
 task list can be opened by cliking on its name
 
