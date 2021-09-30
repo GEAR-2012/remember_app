@@ -70,6 +70,8 @@ if (!isset($_POST['submit'])) {
     }
     $validate = new Validate();
     $pwd_1 = $validate->cleanInput($_POST['pwd_1']);
+    $isPasswordCorrect = $validate->pwd($pwd_1);
+    $_SESSION['errors']['pwd_1'] = $isPasswordCorrect;
     unset($validate);
     
     // password 2
@@ -131,7 +133,7 @@ if (!isset($_POST['submit'])) {
       unset($dbUserAuth);
       // store user in session variable
       $_SESSION['user_name'] = $getUser['user_name'];
-      $_SESSION['user_id'] = $getUser['id'];
+      $_SESSION['user_id'] = $getUser['user_id'];
 
       // redirect to collection page
       header('Location: ../processes/collection.proc.php');

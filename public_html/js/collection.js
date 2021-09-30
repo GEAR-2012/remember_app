@@ -1,7 +1,5 @@
 // 'taskListCollectionFromPHP' variable contains the task list collections data from PHP & from database
 
-console.log(taskListCollectionFromPHP);
-
 const collectionForm = document.querySelector("#collection__form");
 const collectionContainer = document.querySelector("#collection-container");
 const createNewListBtn = document.querySelector("#add-new-button");
@@ -50,7 +48,7 @@ function makeListItem(id, text, countAll, countTrue) {
   // make the counter
   const listCounter = document.createElement("span");
   listCounter.classList.add("task-list__counter");
-  listCounter.textContent = `${countAll}/${countTrue}`;
+  listCounter.textContent = `${countTrue}/${countAll}`;
   // make the text
   const listText = document.createElement("span");
   listText.classList.add("task-list__name");

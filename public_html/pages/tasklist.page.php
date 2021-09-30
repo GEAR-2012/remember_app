@@ -20,11 +20,16 @@ include '../templates/welcome.temp.php';
 
 
 $taskListToJS = $_SESSION['tasklist'];
+
 ?>
 <script>
   // getting data from PHP
   // and passing further down to JavaScirpt
-  const taskListFromPHP = JSON.parse('<?php echo $taskListToJS;?>');
+  // const tasklistString = <?php echo $taskListToJS ?>;
+  // console.log(tasklistString);
+  const taskListFromPHP = <?php echo $taskListToJS ?>;
+
+  // console.log(taskListFromPHP);
 </script>
 
 <div class="main-wrapper content-center">

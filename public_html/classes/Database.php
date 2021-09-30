@@ -12,7 +12,7 @@ class Database
     private $serverName = 'localhost';
     private $dBUsername = 'root';
     private $dBPassword = 'TurtleDove01';
-    private $dBName = 'remember_2';
+    private $dBName = 'remember';
 
     // connection obj
     protected $conn;

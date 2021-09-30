@@ -24,8 +24,8 @@ if (isset($_POST['back'])) {
     // define the necessary variables
     $userId = $_SESSION['user_id'];
     $taskListId = $_SESSION['task_list_open'];
-    $taskListName = $taskList['task_list_name'];
-    $taskListList = $taskList['task_list'];
+    $taskListName = $taskList['tasklist_name'];
+    $taskListList = $taskList['tasklist'];
     // update tasklist in the database
     $dBLists = new Lists();
     $dBLists->updateOneTaskList($userId, $taskListId, $taskListName, $taskListList);
