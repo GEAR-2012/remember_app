@@ -3,16 +3,16 @@
 class Database
 {
     // production database info
-    // private $serverName = 'localhost';
-    // private $dBUsername = 'forevods_admin01';
-    // private $dBPassword = 'RememberAdmin01';
-    // private $dBName = 'forevods_remember';
+    private $serverName = 'localhost';
+    private $dBUsername = 'forevods_admin01';
+    private $dBPassword = 'RememberAdmin01';
+    private $dBName = 'forevods_remember';
 
     // development databse info
-    private $serverName = 'localhost';
-    private $dBUsername = 'root';
-    private $dBPassword = 'TurtleDove01';
-    private $dBName = 'remember';
+    // private $serverName = 'localhost';
+    // private $dBUsername = 'root';
+    // private $dBPassword = 'TurtleDove01';
+    // private $dBName = 'remember';
 
     // connection obj
     protected $conn;
