@@ -29,9 +29,6 @@ menuBtn.onclick = () => {
   modalMenu.classList.remove("hide");
 };
 
-// modal menu is hidden initially
-modalMenu.classList.add("hide");
-
 // if clicking when the modal menu is open
 modalMenu.onclick = (e) => {
   const clickedId = e.target.id;

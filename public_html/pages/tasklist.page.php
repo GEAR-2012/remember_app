@@ -55,7 +55,7 @@ $taskListToJS = $_SESSION['tasklist'];
     </form>
   </div>
 
-  <div id="modal-menu" class="modal-menu content-center">
+  <div id="modal-menu" class="modal-menu content-center hide">
     <div class="modal-menu__content">
       <div class="modal-menu__item">
         <label for="search" class="search-box__label">
