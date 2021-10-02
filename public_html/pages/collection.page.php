@@ -31,7 +31,7 @@ $collectionCount = $_SESSION['collection-count']
 <div class="main-wrapper content-center">
   <div class="form__cont">
     <div>
-      <h1 id="collection__title" class="collection__title">Task List Collection</h1>
+        <h1 id="collection__title" class="collection__title">Task List Collection</h1>
 
       <?php if ($collectionCount): ?>
         <p class="collection__sub-title">Open one to add tasks to it.</p>

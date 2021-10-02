@@ -6,11 +6,104 @@ const backBtn = document.querySelector("#back-btn");
 const taskListContainer = document.querySelector("#task-list__container");
 const resetTaskListBtn = document.querySelector("#reset-task-list");
 const deleteTaskListBtn = document.querySelector("#delete-task-list");
+const menuBtn = document.querySelector("#task-list__menu-btn");
+const modalMenu = document.querySelector("#modal-menu");
+const inputSearch = document.querySelector("#search");
+const inputSortReverse = document.querySelector("#sort-reverse");
+const inputSortAlpha = document.querySelector("#sort-alpha");
+const inputSortCreated = document.querySelector("#sort-created");
+const formMessage = document.querySelector("#form__message");
+let sortReverse = inputSortReverse.checked;
+let sortBy = "";
+let searchString = "";
+let hiddenTasklist = [];
 // 'taskListFromPHP' variable contains the task list data from PHP & from database
 
 addNewTaskInput.setAttribute("placeholder", "Add new task to the list");
 
 taskListTitle.textContent = taskListFromPHP.tasklist_name;
+// --------------
+
+// three dots menu open modal menu
+menuBtn.onclick = () => {
+  modalMenu.classList.remove("hide");
+};
+
+// modal menu is hidden initially
+modalMenu.classList.add("hide");
+
+// if clicking when the modal menu is open
+modalMenu.onclick = (e) => {
+  const clickedId = e.target.id;
+  switch (clickedId) {
+    case "search-icon":
+      // search label clicked
+      modalMenu.classList.add("hide");
+      break;
+    case "sort-reverse":
+      // sort reverse clicked
+      sortReverse = inputSortReverse.checked;
+      // calling sorting function
+      sortByFunc();
+      break;
+    case "sort-alpha":
+      // sort alphabetically clicked
+      sortBy = "task_name";
+      // calling sorting function
+      sortByFunc();
+      break;
+    case "sort-created":
+      // sort by time created clicked
+      sortBy = "created_at";
+      // calling sorting function
+      sortByFunc();
+      break;
+    case "modal-menu":
+      // clicked outside the menu window
+      modalMenu.classList.add("hide");
+      break;
+  }
+};
+
+function sortByFunc() {
+  if (sortBy === "created_at") {
+    // sort by time of addition 'created_at' descending
+    if (sortReverse) {
+      taskListFromPHP.tasklist.sort((a, b) => a.created_at - b.created_at);
+    } else {
+      taskListFromPHP.tasklist.sort((a, b) => b.created_at - a.created_at);
+    }
+  } else if (sortBy === "task_name") {
+    // sort by task name alphabetically 'task_name' ascending
+    taskListFromPHP.tasklist.sort(dynamicSort(sortBy));
+
+    function dynamicSort(property) {
+      return function (a, b) {
+        if (sortReverse) {
+          return b[property].localeCompare(a[property]);
+        } else {
+          return a[property].localeCompare(b[property]);
+        }
+      };
+    }
+  }
+  emptyTasklistContainer();
+  generateTaskList(taskListFromPHP.tasklist);
+}
+
+// when the menu search input changing (oninput)
+inputSearch.oninput = (e) => {
+  searchString = e.target.value;
+  listSeparator(searchString);
+  emptyTasklistContainer();
+  generateTaskList(taskListFromPHP.tasklist);
+
+  if (searchString) {
+    formMessage.classList.remove("hide");
+  } else {
+    formMessage.classList.add("hide");
+  }
+};
 
 // CHECK FOR TASKLIST LIST
 if (!taskListFromPHP.tasklist) {
@@ -35,7 +128,7 @@ function generateTaskList(taskList) {
 function addNewTaskHandler() {
   if (addNewTaskInput.value) {
     if (checkForEmptyList() === 0) {
-      taskListContainer.innerHTML = "";
+      emptyTasklistContainer();
     }
     const newTask = {
       task_name: addNewTaskInput.value,
@@ -51,20 +144,23 @@ addNewTaskBtn.onclick = addNewTaskHandler;
 
 // inserts a new task into the form
 function insertNewTask(taskObj) {
-  taskObj.created_at = new Date(taskObj.created_at).valueOf(); // Temporary
+  // make an id 'created_at' because the 'task_id' doesn't exists when new task added
+  const listId = taskObj.created_at;
+  const labelId = "lbl_" + listId;
   // make a task item container
   const newTaskItem = document.createElement("div");
   newTaskItem.classList.add("list-item");
+  newTaskItem.setAttribute("id", listId);
   // MAKE A CUSTOM CHECKBOX
   // make a label item for checkbox input & as a container for custom checkbox icons
   const newLblItem = document.createElement("label");
   newLblItem.classList.add("label-as-cont");
-  newLblItem.setAttribute("for", taskObj.created_at);
+  newLblItem.setAttribute("for", labelId);
   newLblItem.setAttribute("title", "toggle this task");
   // make a checkbox
   const newChkItem = document.createElement("input");
   newChkItem.classList.add("chk");
-  newChkItem.setAttribute("id", taskObj.created_at);
+  newChkItem.setAttribute("id", labelId);
   newChkItem.setAttribute("type", "checkbox");
   newChkItem.setAttribute("onchange", "checkTaskItemHandler(this)");
   if (taskObj.task_status) {
@@ -87,7 +183,7 @@ function insertNewTask(taskObj) {
   if (taskObj.task_status) {
     newInpItem.classList.add("line-through");
   }
-  newInpItem.setAttribute("id", taskObj.created_at);
+  newInpItem.setAttribute("id", listId);
   newInpItem.setAttribute("contenteditable", true);
   newInpItem.setAttribute("oninput", "editableEditHandler(this)");
   newInpItem.setAttribute("title", "click to edit this task");
@@ -110,6 +206,9 @@ function insertNewTask(taskObj) {
 // when the form submitted
 formList.onsubmit = (e) => {
   // e.preventDefault();
+  // combine the visible list & hidden list
+  const list = [...taskListFromPHP.tasklist, ...hiddenTasklist];
+  taskListFromPHP.tasklist = list;
   // add the task list object as value to the form hidden input
   // so this way to send back to php
   backBtn.value = JSON.stringify(taskListFromPHP);
@@ -125,26 +224,30 @@ window.onkeydown = (e) => {
 
 // when an entry delete button clicked
 function deleteTaskItemHandler(e) {
-  const taskId = parseInt(e.parentElement.childNodes[0].firstElementChild.id, 10);
+  // get the id of 'list-item'
+  const taskId = parseInt(e.parentElement.id, 10);
   e.parentElement.remove();
+  taskListFromPHP.tasklist = taskListFromPHP.tasklist.filter((listItem) => listItem.created_at !== taskId);
   if (checkForEmptyList() === 0) {
     displayEmptyMsg();
   }
-  taskListFromPHP.tasklist = taskListFromPHP.tasklist.filter((listItem) => listItem.created_at !== taskId);
 }
 
 // when a task checked
 function checkTaskItemHandler(e) {
+  // get clicked label corresponding checkbox
   const changedChk = e;
-  const idOfChanged = parseInt(changedChk.id, 10);
-  const targetElement = document.querySelector(`span[id='${idOfChanged}']`);
+  // get the id of 'list-item'
+  const taskId = parseInt(e.parentElement.parentElement.id, 10);
+  // get task name element
+  const targetElement = document.querySelector(`span[id='${taskId}']`);
   if (changedChk.checked) {
     targetElement.classList.add("line-through");
   } else {
     targetElement.classList.remove("line-through");
   }
   taskListFromPHP.tasklist.map((listItem) => {
-    if (listItem.created_at === idOfChanged) {
+    if (listItem.created_at === taskId) {
       if (changedChk.checked) {
         listItem.task_status = true;
       } else {
@@ -169,15 +272,25 @@ function resetTaskListHandler() {
     taskListItem.task_status = false;
   });
 }
-resetTaskListBtn.onclick = resetTaskListHandler;
+resetTaskListBtn.onclick = () => {
+  if (!resetTaskListBtn.dataset.status) {
+    resetTaskListHandler();
+  }
+};
 
 // delete all task list item from task list container
 function deleteTaskListHandler() {
-  taskListContainer.innerHTML = "";
-  displayEmptyMsg();
+  emptyTasklistContainer();
   taskListFromPHP.tasklist = [];
+  if (checkForEmptyList() === 0) {
+    displayEmptyMsg();
+  }
 }
-deleteTaskListBtn.onclick = deleteTaskListHandler;
+deleteTaskListBtn.onclick = () => {
+  if (!deleteTaskListBtn.dataset.status) {
+    deleteTaskListHandler();
+  }
+};
 
 // displays the empty message in the task list container
 function displayEmptyMsg() {
@@ -189,20 +302,53 @@ function displayEmptyMsg() {
 
 // check if the task list empty
 function checkForEmptyList() {
-  const listItems = document.querySelectorAll(".list-item");
-  return listItems.length;
+  // get the filtered & the rest of the list items
+  const filteredAndtheRest = [...taskListFromPHP.tasklist, ...hiddenTasklist];
+  // ...& return it's length
+  return filteredAndtheRest.length;
 }
 
 // when a contenteditable element is edited
 function editableEditHandler(e) {
-  const task = e.textContent;
+  // get the id of 'list-item'
+  const taskId = parseInt(e.parentElement.id, 10);
+  const newText = e.textContent;
   if (e.id === "task-list__title") {
-    taskListFromPHP.tasklist_name = task;
+    taskListFromPHP.tasklist_name = newText;
   } else {
     taskListFromPHP.tasklist.map((taskItem) => {
-      if (taskItem.created_at === parseInt(e.id, 10)) {
-        taskItem.task = task;
+      if (taskItem.created_at === taskId) {
+        taskItem.task_name = newText;
       }
     });
   }
+}
+
+// separate the tasklist based on searched string
+// make visible list & hidden list
+function listSeparator(str) {
+  // combine the visible list & hidden list
+  const list = [...taskListFromPHP.tasklist, ...hiddenTasklist];
+
+  // Let's separate the 'list':
+  // get filtered list based on 'str' variable
+  const visibleTasklist = list.filter((listitem) => {
+    const txt = listitem.task_name;
+    const pattern = new RegExp(str, "i");
+    return pattern.test(txt);
+  });
+
+  // get the rest of the original list
+  hiddenTasklist = list.filter((listitem) => {
+    const txt = listitem.task_name;
+    const pattern = new RegExp(str, "i");
+    return !pattern.test(txt);
+  });
+
+  // change the original list to filtered list
+  taskListFromPHP.tasklist = visibleTasklist;
+}
+
+function emptyTasklistContainer() {
+  taskListContainer.innerHTML = "";
 }

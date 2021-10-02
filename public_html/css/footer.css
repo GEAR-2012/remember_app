@@ -11,7 +11,7 @@ footer {
   padding: var(--s-size) var(--xl-size);
   position: fixed;
   width: 100vw;
-  z-index: 10;
+  z-index: 2;
 }
 
 footer .copyright {

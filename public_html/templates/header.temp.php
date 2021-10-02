@@ -15,6 +15,7 @@ if (isset($_SESSION['user_name'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Remember App</title>
+  <link rel="icon" href="../icons/list-alt-regular.svg" >
   <!-- Fontawesome -->
   <script src="https://kit.fontawesome.com/f3fb50eddd.js" crossorigin="anonymous" defer></script>
   <!-- CSS -->

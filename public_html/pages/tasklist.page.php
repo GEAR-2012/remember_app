@@ -34,7 +34,14 @@ $taskListToJS = $_SESSION['tasklist'];
 
 <div class="main-wrapper content-center">
   <div class="form__cont">
-    <h1 id="task-list__title" class="task-list__title" oninput="editableEditHandler(this)" title='click to edit the tasklist name' contenteditable></h1>
+
+    <div class="form__header">
+      <h1 id="task-list__title" class="task-list__title" oninput="editableEditHandler(this)" title='click to edit the tasklist name' contenteditable></h1>
+      <i id="task-list__menu-btn" class="fas fa-ellipsis-v task-list__menu-btn"></i>
+    </div>
+      <p id="form__message" class="form__message hide">!!! Filtered list !!!</p>
+
+
     <form class="task-list__form" id="task-list__form" action="../processes/tasklist.proc.php" method="POST">
       <div id="task-list__container" class="task-list__container">
         <!-- JavaScript fill this container -->
@@ -47,6 +54,30 @@ $taskListToJS = $_SESSION['tasklist'];
       <button id="back-btn" class="button--medium" type="submit" name="back" value="" title="save this task list & go back to your task list collection">Save & Back</button>
     </form>
   </div>
+
+  <div id="modal-menu" class="modal-menu content-center">
+    <div class="modal-menu__content">
+      <div class="modal-menu__item">
+        <label for="search" class="search-box__label">
+          <i id="search-icon" class="fas fa-search"></i>
+        </label>
+        <input type="text" id="search" class="search-box" placeholder="Search...">
+      </div>
+      <div class="modal-menu__item">
+        <input type="checkbox" name="reverse" id="sort-reverse" class="sort-box">
+        <label for="sort-reverse"  class="sort-label">Sort reverse</label>
+      </div>
+      <div class="modal-menu__item">
+        <input type="radio" name="sort" id="sort-alpha" class="sort-box">
+        <label for="sort-alpha" class="sort-label">Sort alphabetical</label>
+      </div>
+      <div class="modal-menu__item">
+        <input type="radio" name="sort" id="sort-created"  class="sort-box">
+        <label for="sort-created" class="sort-label">Sort time added</label>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- JavaScript -->
