@@ -4,7 +4,9 @@ const addNewTaskInput = document.querySelector("#add-new-input");
 const formList = document.querySelector("#task-list__form");
 const backBtn = document.querySelector("#back-btn");
 const taskListContainer = document.querySelector("#task-list__container");
-const resetTaskListBtn = document.querySelector("#reset-task-list");
+const undoBtn = document.querySelector("#undo");
+const redoBtn = document.querySelector("#redo");
+const uncheckTaskListBtn = document.querySelector("#uncheck-task-list");
 const deleteTaskListBtn = document.querySelector("#delete-task-list");
 const menuBtn = document.querySelector("#task-list__menu-btn");
 const modalMenu = document.querySelector("#modal-menu");
@@ -14,15 +16,30 @@ const inputSortAlpha = document.querySelector("#sort-alpha");
 const inputSortCreated = document.querySelector("#sort-created");
 const formMessage = document.querySelector("#form__message");
 let sortReverse = inputSortReverse.checked;
-let sortBy = "";
+let sortBy = "magic"; // set the tasklist initially to magically sorted
 let searchString = "";
 let hiddenTasklist = [];
+let undoList = [];
+let undoIndex = 0;
+
 // 'taskListFromPHP' variable contains the task list data from PHP & from database
+converTasklist(taskListFromPHP.tasklist);
+saveIntoUndo();
 
 addNewTaskInput.setAttribute("placeholder", "Add new task to the list");
 
-taskListTitle.textContent = taskListFromPHP.tasklist_name;
-// --------------
+displayTasklist();
+
+function displayTasklist() {
+  taskListTitle.textContent = taskListFromPHP.tasklist_name;
+  emptyTasklistContainer();
+  if (checkForEmptyList()) {
+    sortByFunc();
+    filtering();
+  } else {
+    displayMsg("Add new item to the list");
+  }
+}
 
 // three dots menu open modal menu
 menuBtn.onclick = () => {
@@ -37,23 +54,29 @@ modalMenu.onclick = (e) => {
       // search label clicked
       modalMenu.classList.add("hide");
       break;
+    case "sort-magic":
+      // sort magic clicked
+      sortBy = "magic";
+      // calling sorting function
+      rearrangeTasklistDOM();
+      break;
     case "sort-reverse":
       // sort reverse clicked
       sortReverse = inputSortReverse.checked;
       // calling sorting function
-      sortByFunc();
+      rearrangeTasklistDOM();
       break;
     case "sort-alpha":
       // sort alphabetically clicked
       sortBy = "task_name";
       // calling sorting function
-      sortByFunc();
+      rearrangeTasklistDOM();
       break;
     case "sort-created":
       // sort by time created clicked
       sortBy = "created_at";
       // calling sorting function
-      sortByFunc();
+      rearrangeTasklistDOM();
       break;
     case "modal-menu":
       // clicked outside the menu window
@@ -63,7 +86,22 @@ modalMenu.onclick = (e) => {
 };
 
 function sortByFunc() {
-  if (sortBy === "created_at") {
+  if (sortBy === "magic") {
+    const list = taskListFromPHP.tasklist;
+    // sort alphabetically
+    const alpha = list.sort((a, b) => {
+      return a.task_name.localeCompare(b.task_name);
+    });
+    // filter tasks which are done
+    const done = alpha.filter((task) => {
+      return task.task_status == true;
+    });
+    // filter tasks which aren't done
+    const notDone = alpha.filter((task) => {
+      return task.task_status == false;
+    });
+    taskListFromPHP.tasklist = [...notDone, ...done];
+  } else if (sortBy === "created_at") {
     // sort by time of addition 'created_at' descending
     if (sortReverse) {
       taskListFromPHP.tasklist.sort((a, b) => a.created_at - b.created_at);
@@ -84,35 +122,26 @@ function sortByFunc() {
       };
     }
   }
-  emptyTasklistContainer();
-  generateTaskList(taskListFromPHP.tasklist);
 }
 
 // when the menu search input changing (oninput)
 inputSearch.oninput = (e) => {
   searchString = e.target.value;
-  listSeparator(searchString);
-  emptyTasklistContainer();
-  generateTaskList(taskListFromPHP.tasklist);
+  filtering();
+};
 
+function filtering() {
+  listSeparator(searchString);
+  rearrangeTasklistDOM();
   if (searchString) {
     formMessage.classList.remove("hide");
   } else {
     formMessage.classList.add("hide");
   }
-};
-
-// CHECK FOR TASKLIST LIST
-if (!taskListFromPHP.tasklist) {
-  // if no value yet on the list key of tasklist object
-  deleteTaskListHandler();
-} else if (taskListFromPHP.tasklist.length === 0) {
-  // if the list exist but empty
-  deleteTaskListHandler();
+  if (checkForEmptyVisibleList() === 0) {
+    displayMsg("No match was found");
+  }
 }
-
-// fill the task list container
-generateTaskList(taskListFromPHP.tasklist);
 
 // generates the entire task list into the task list container
 function generateTaskList(taskList) {
@@ -124,17 +153,19 @@ function generateTaskList(taskList) {
 // add new task button handler
 function addNewTaskHandler() {
   if (addNewTaskInput.value) {
-    if (checkForEmptyList() === 0) {
-      emptyTasklistContainer();
-    }
+    // if (checkForEmptyList() === 0) {
+    //   emptyTasklistContainer();
+    // }
     const newTask = {
       task_name: addNewTaskInput.value,
       task_status: false,
       created_at: Date.now(),
     };
     addNewTaskInput.value = "";
-    insertNewTask(newTask);
+    // insertNewTask(newTask);
     taskListFromPHP.tasklist.push(newTask);
+    rearrangeTasklistDOM();
+    saveIntoUndo();
   }
 }
 addNewTaskBtn.onclick = addNewTaskHandler;
@@ -226,8 +257,9 @@ function deleteTaskItemHandler(e) {
   e.parentElement.remove();
   taskListFromPHP.tasklist = taskListFromPHP.tasklist.filter((listItem) => listItem.created_at !== taskId);
   if (checkForEmptyList() === 0) {
-    displayEmptyMsg();
+    displayMsg("Add new item to the list");
   }
+  saveIntoUndo();
 }
 
 // when a task checked
@@ -253,6 +285,9 @@ function checkTaskItemHandler(e) {
     }
     return listItem;
   });
+  sortByFunc();
+  rearrangeTasklistDOM();
+  saveIntoUndo();
 }
 
 // reset (uncheck) all task list item
@@ -268,32 +303,34 @@ function resetTaskListHandler() {
   taskListFromPHP.tasklist.forEach((taskListItem) => {
     taskListItem.task_status = false;
   });
+  sortByFunc();
+  rearrangeTasklistDOM();
+  saveIntoUndo();
 }
-resetTaskListBtn.onclick = () => {
-  if (!resetTaskListBtn.dataset.status) {
-    resetTaskListHandler();
-  }
-};
+uncheckTaskListBtn.onclick = resetTaskListHandler;
 
 // delete all task list item from task list container
 function deleteTaskListHandler() {
   emptyTasklistContainer();
   taskListFromPHP.tasklist = [];
-  if (checkForEmptyList() === 0) {
-    displayEmptyMsg();
+  if (searchString) {
+    if (checkForEmptyVisibleList() === 0) {
+      displayMsg("No match was found");
+    }
+  } else {
+    if (checkForEmptyList() === 0) {
+      displayMsg("Add new item to the list");
+    }
   }
+  saveIntoUndo();
 }
-deleteTaskListBtn.onclick = () => {
-  if (!deleteTaskListBtn.dataset.status) {
-    deleteTaskListHandler();
-  }
-};
+deleteTaskListBtn.onclick = deleteTaskListHandler;
 
 // displays the empty message in the task list container
-function displayEmptyMsg() {
+function displayMsg(msg) {
   const msgElem = document.createElement("h2");
   msgElem.classList.add("empty-msg");
-  msgElem.textContent = "Add new item to the list";
+  msgElem.textContent = msg;
   taskListContainer.appendChild(msgElem);
 }
 
@@ -303,6 +340,11 @@ function checkForEmptyList() {
   const filteredAndtheRest = [...taskListFromPHP.tasklist, ...hiddenTasklist];
   // ...& return it's length
   return filteredAndtheRest.length;
+}
+
+// check if the visible task list empty
+function checkForEmptyVisibleList() {
+  return taskListFromPHP.tasklist.length;
 }
 
 // when a contenteditable element is edited
@@ -319,6 +361,7 @@ function editableEditHandler(e) {
       }
     });
   }
+  saveIntoUndo();
 }
 
 // separate the tasklist based on searched string
@@ -348,4 +391,67 @@ function listSeparator(str) {
 
 function emptyTasklistContainer() {
   taskListContainer.innerHTML = "";
+}
+
+function rearrangeTasklistDOM() {
+  emptyTasklistContainer();
+  sortByFunc();
+  generateTaskList(taskListFromPHP.tasklist);
+}
+
+function saveIntoUndo() {
+  undoList = undoList.slice(0, undoIndex + 1);
+  // get visible & invisible tasklist arrays
+  const visibleList = JSON.parse(JSON.stringify(taskListFromPHP.tasklist));
+  const invisibleList = JSON.parse(JSON.stringify(hiddenTasklist));
+  // clone the entire tasklist object
+  const obj = JSON.parse(JSON.stringify(taskListFromPHP));
+  // change tasklist object's tasklist
+  obj.tasklist = [...visibleList, ...invisibleList];
+  // make an object containts the full tasklist object & 'searchString' variable
+  state = { tasklistObj: obj, searchString: searchString };
+  state = JSON.stringify(state);
+  // ..& if previous state and this state not same then push into the undo list
+  const statePrev = undoList.slice(-1)[0];
+  if (statePrev !== state) {
+    undoList.push(state);
+    undoIndex = undoList.length - 1;
+  }
+}
+
+function undoHandler() {
+  if (undoIndex) {
+    undoIndex--;
+    getUndoState();
+  }
+}
+undoBtn.onclick = undoHandler;
+
+function redoHandler() {
+  if (undoIndex < undoList.length - 1) {
+    undoIndex++;
+    getUndoState();
+  }
+}
+redoBtn.onclick = redoHandler;
+
+function getUndoState() {
+  hiddenTasklist = [];
+  let state = undoList[undoIndex];
+  state = JSON.parse(state);
+  taskListFromPHP = { ...state.tasklistObj };
+  searchString = state.searchString;
+  displayTasklist();
+  inputSearch.value = searchString;
+}
+
+// converts tasklist status from 0/1 to false/true
+function converTasklist(tasklist) {
+  return tasklist.map((task) => {
+    if (task.task_status === 0) {
+      task.task_status = false;
+    } else if (task.task_status === 1) {
+      task.task_status = true;
+    }
+  });
 }

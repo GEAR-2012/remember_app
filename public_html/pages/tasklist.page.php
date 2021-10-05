@@ -27,7 +27,7 @@ $taskListToJS = $_SESSION['tasklist'];
   // and passing further down to JavaScirpt
   // const tasklistString = <?php echo $taskListToJS ?>;
   // console.log(tasklistString);
-  const taskListFromPHP = <?php echo $taskListToJS ?>;
+  let taskListFromPHP = <?php echo $taskListToJS ?>;
 
   // console.log(taskListFromPHP);
 </script>
@@ -48,8 +48,12 @@ $taskListToJS = $_SESSION['tasklist'];
       </div>
       <?php include '../templates/add_new.temp.php'; ?>
       <div class="task-list__buttons">
-        <i id="reset-task-list" title="reset the entire task list"  class="fas fa-undo-alt"></i>
-        <i id="delete-task-list" title="delte the entire task list"  class="fas fa-trash-alt"></i>
+        <div class="undo-redo">
+          <i id="undo" title="undo"  class="fas fa-undo"></i>
+          <i id="redo" title="redo"  class="fas fa-redo"></i>
+        </div>
+        <i id="uncheck-task-list" title="uncheck all task item"  class="far fa-times-circle"></i>
+        <i id="delete-task-list" title="delte all task item"  class="fas fa-trash-alt"></i>
       </div>
       <button id="back-btn" class="button--medium" type="submit" name="back" value="" title="save this task list & go back to your task list collection">Save & Back</button>
     </form>
@@ -57,24 +61,38 @@ $taskListToJS = $_SESSION['tasklist'];
 
   <div id="modal-menu" class="modal-menu content-center hide">
     <div class="modal-menu__content">
+
       <div class="modal-menu__item">
         <label for="search" class="search-box__label">
           <i id="search-icon" class="fas fa-search"></i>
         </label>
         <input type="text" id="search" class="search-box" placeholder="Search...">
       </div>
+
+      <hr>
+
+      <div class="modal-menu__item">
+        <input type="radio" name="sort" id="sort-magic" class="sort-box" checked>
+        <label for="sort-magic" class="sort-label">Sort magically</label>
+      </div>
+
+      <hr>
+
       <div class="modal-menu__item">
         <input type="checkbox" name="reverse" id="sort-reverse" class="sort-box">
         <label for="sort-reverse"  class="sort-label">Sort reverse</label>
       </div>
+
       <div class="modal-menu__item">
         <input type="radio" name="sort" id="sort-alpha" class="sort-box">
         <label for="sort-alpha" class="sort-label">Sort alphabetical</label>
       </div>
+
       <div class="modal-menu__item">
         <input type="radio" name="sort" id="sort-created"  class="sort-box">
         <label for="sort-created" class="sort-label">Sort time added</label>
       </div>
+
     </div>
   </div>
 

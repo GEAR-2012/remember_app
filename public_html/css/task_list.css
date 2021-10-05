@@ -127,12 +127,22 @@
 }
 
 .task-list__buttons i {
-  background-color: var(--color-btn);
-  color: var(--color-light);
   cursor: pointer;
-  border-radius: 50%;
-  font-size: var(--m-font);
-  padding: var(--xs-size);
+  font-size: var(--l-font);
+  padding: var(--xxs-size);
+}
+
+.task-list__buttons #undo,
+.task-list__buttons #redo {
+  color: var(--color-btn);
+}
+
+.task-list__buttons #uncheck-task-list {
+  color: var(--color-green);
+}
+
+.task-list__buttons #delete-task-list {
+  color: var(--color-red);
 }
 
 .modal-menu {
@@ -245,12 +255,12 @@
   }
 
   .task-list__buttons {
-    gap: var(--xl-size);
+    gap: var(--m-size);
   }
 
   .task-list__buttons i {
     font-size: var(--s-font);
-    padding: var(--xs-size);
+    padding: var(--xxs-size);
   }
 
   .modal-menu__content {
