@@ -20,7 +20,7 @@ CREATE TABLE remember.tasklists (
 -- 
 CREATE TABLE remember.tasks (
   id INT NOT NULL AUTO_INCREMENT,
-  task_name VARCHAR(40) NOT NULL,
+  task_name VARCHAR(100) NOT NULL,
   task_status BOOLEAN NOT NULL DEFAULT false,
   created_at BIGINT(20) UNSIGNED NOT NULL,
   list_id INT NOT NULL,

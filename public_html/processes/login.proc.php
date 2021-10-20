@@ -77,6 +77,10 @@ if (!isset($_POST['submit'])) {
   // store user in session variable
     $_SESSION['user_name'] = $getUser['user_name'];
     $_SESSION['user_id'] = $getUser['user_id'];
+        // store user in cookies
+        $expireDate = time() + 60 * 60 * 24 * 10;
+        setcookie('user_name', $getUser['user_name'], $expireDate, '/');
+        setcookie('user_id', $getUser['user_id'], $expireDate, '/');
 
     // redirect to collection page
     header('Location: ../processes/collection.proc.php');
