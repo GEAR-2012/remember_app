@@ -8,18 +8,6 @@ class Database
     private $dBPassword = '3MAbLJ8|2r&Lq9DT';
     private $dBName = 'id17724645_remember';
 
-    // production database info (InfinityFree)
-    // private $serverName = 'sql112.epizy.com';
-    // private $dBUsername = 'epiz_29945909';
-    // private $dBPassword = '6D27aod5ZWh';
-    // private $dBName = 'epiz_29945909_remember';
-
-    // production database info (Hostgator)
-    // private $serverName = 'localhost';
-    // private $dBUsername = 'forevods_admin01';
-    // private $dBPassword = 'RememberAdmin01';
-    // private $dBName = 'forevods_remember';
-
     // development databse info
     // private $serverName = 'localhost';
     // private $dBUsername = 'root';
@@ -47,8 +35,6 @@ class Database
             $this->conn = $conn;
         }
     }
-
-
 
     public function __destruct()
     {

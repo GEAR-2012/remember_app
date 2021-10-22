@@ -23,9 +23,11 @@ task list name can be edited by clicking on its name
 task list item can be edited by clicking on its name
 task list item can be checked or unchecked by clicking on the icon in front of it
 task list item can be deleted by clicking on the icon on the end of it
-underneath the task list there are two buttons:
-the left button reset the full task list so all of them will be unchecked
-the right button delete the full task list
+underneath the task list there are four buttons:
+- undo
+- redo
+- list uncheck
+- list delete
 by clicking on the 'save & back' button the edited list will updated in the database
 if you clicked that button there is no way back
 so if the list accidentally deleted just refresh the page to retrive back everything
