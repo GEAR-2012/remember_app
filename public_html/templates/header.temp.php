@@ -17,7 +17,7 @@ if (isset($_SESSION['user_name'])) {
   <title>Remember App</title>
   <link rel="icon" href="../icons/list-alt-regular.svg" >
   <!-- Fontawesome -->
-  <script src="https://kit.fontawesome.com/f3fb50eddd.js" crossorigin="anonymous" defer></script>
+  <script src="https://kit.fontawesome.com/b3d5dbe4aa.js" crossorigin="anonymous" defer></script>
   <!-- CSS -->
   <link rel="stylesheet" href="../css/settings.css">
   <link rel="stylesheet" href="../css/header.css">
@@ -41,5 +41,5 @@ if (isset($_SESSION['user_name'])) {
         </form>
         <?php
       }
-    ?>
+?>
   </header>
